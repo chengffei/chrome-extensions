@@ -1,0 +1,36 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>Lodestone 资源名测试</title>
+<style>body{font:15px sans-serif;max-width:760px;margin:40px auto}td{padding:4px 8px;border-bottom:1px solid #ddd}.post{margin:24px 0}</style></head><body>
+<h1>资源名推测测试</h1>
+
+<h2>A. 表格，名字在同一行左侧</h2>
+<table><tbody>
+<tr data-expect="沙丘2.Dune.Part.Two.2024.2160p.WEB-DL.mkv"><td>沙丘2.Dune.Part.Two.2024.2160p.WEB-DL.mkv</td><td>18.2 GB</td><td>2024-05-01</td><td><a href="magnet:?xt=urn:btih:fffffffffffffffffffffffffffffffffffffff1">磁力链接</a></td></tr>
+<tr data-expect="奥本海默 Oppenheimer 1080p"><td><a href="/detail/2">奥本海默 Oppenheimer 1080p</a></td><td>9.1 GB</td><td><a href="magnet:?xt=urn:btih:fffffffffffffffffffffffffffffffffffffff2">下载</a></td></tr>
+</tbody></table>
+
+<h2>B. 论坛帖子，标题在上方</h2>
+<div class="post" data-expect="三体 第一季 全30集"><h3 class="post-title">三体 第一季 全30集</h3><p>大小：45GB</p><p>发布时间：2023-02-01</p><p>磁力：magnet:?xt=urn:btih:fffffffffffffffffffffffffffffffffffffff3</p></div>
+<div class="post" data-expect="漫长的季节 4K 修复版"><h3>漫长的季节 4K 修复版</h3><p>感谢楼主分享，已下载。</p><p>fffffffffffffffffffffffffffffffffffffff4</p></div>
+
+<h2>C. 名称标签</h2>
+<div data-expect="Ubuntu 24.04 LTS 桌面版"><p>名称：Ubuntu 24.04 LTS 桌面版<br>大小：5.7 GB<br>磁链：<a href="magnet:?xt=urn:btih:fffffffffffffffffffffffffffffffffffffff5">点击下载</a></p></div>
+
+<h2>D. 同一段 pre 里多条，名字在上一行</h2>
+<pre>
+Debian 12 netinst
+magnet:?xt=urn:btih:fffffffffffffffffffffffffffffffffffffff6
+Fedora 40 Workstation
+magnet:?xt=urn:btih:fffffffffffffffffffffffffffffffffffffff7
+</pre>
+
+<h2>E. 名字在下方</h2>
+<div data-expect="Arch Linux 2024.10.01"><p><a href="magnet:?xt=urn:btih:fffffffffffffffffffffffffffffffffffffff8">磁力</a></p><p class="name">Arch Linux 2024.10.01</p></div>
+
+<h2>F. 同一行前缀</h2>
+<p>Linux Mint 22 Cinnamon： magnet:?xt=urn:btih:fffffffffffffffffffffffffffffffffffffff9 ，速度很快</p>
+
+<h2>G. 链接文字就是名字</h2>
+<p><a href="magnet:?xt=urn:btih:fffffffffffffffffffffffffffffffffffffffa">Kali Linux 2024.3 Installer</a></p>
+<h2>H. dn 参数优先</h2>
+<p>无关文字<a href="magnet:?xt=urn:btih:fffffffffffffffffffffffffffffffffffffffb&dn=FreeBSD-14.1">下载</a></p>
+</body></html>

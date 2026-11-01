@@ -1,0 +1,17 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>Magnet Finder 测试页</title>
+<style>body{font:15px sans-serif;max-width:720px;margin:40px auto}.gap{height:900px}</style></head><body>
+<h1>Magnet Finder 测试页</h1>
+<p>1. 普通链接：<a href="magnet:?xt=urn:btih:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&dn=Ubuntu%2024.04">下载 Ubuntu</a></p>
+<p>2. 同一哈希小写再出现（应合并，2 处）：<a href="magnet:?xt=urn:btih:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&dn=Ubuntu%2024.04&tr=udp%3A%2F%2Ftracker.example%3A80">镜像</a></p>
+<div class="gap"></div>
+<p>3. 纯文本：资源在这里 magnet:?xt=urn:btih:BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB&dn=Debian，记得做种。</p>
+<p>4. 括号结尾 (magnet:?xt=urn:btih:CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC).</p>
+<div class="gap"></div>
+<details><summary>5. 折叠区域</summary><a href="magnet:?xt=urn:btih:DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD">隐藏的</a></details>
+<pre>6. 代码块里的 magnet:?xt=urn:btih:EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE</pre>
+<p>7. 裸哈希（十六进制）：1234567890abcdef1234567890abcdef12345678 请自取</p>
+<p>8. 裸哈希（Base32）：HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH</p>
+<p>9. 与第 1 条同一哈希的裸文本（应并入 Ubuntu，变 3 处）：AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</p>
+<p>10. 不应识别：41 位 1234567890abcdef1234567890abcdef123456789，纯数字 1234567890123456789012345678901234567890</p>
+<script>var notThis = "magnet:?xt=urn:btih:FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF";</script>
+</body></html>
