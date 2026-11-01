@@ -1,0 +1,11 @@
+{
+  "manifest_version": 3,
+  "name": "Magnet Finder",
+  "version": "0.1.0",
+  "description": "列出当前页面的磁力链接，一键复制，点一下跳到原位置。",
+  "permissions": ["activeTab", "scripting"],
+  "action": {
+    "default_title": "磁力链接",
+    "default_popup": "popup.html"
+  }
+}
