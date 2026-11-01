@@ -1,11 +1,21 @@
 {
   "manifest_version": 3,
-  "name": "Magnet Finder",
-  "version": "0.1.0",
-  "description": "列出当前页面的磁力链接，一键复制，点一下跳到原位置。",
+  "name": "Lodestone 磁石",
+  "version": "0.2.0",
+  "description": "找出网页里的磁力链接和哈希，推测资源名，一键复制，点一下跳到原位置。",
   "permissions": ["activeTab", "scripting"],
+  "icons": {
+    "16": "icons/16.png",
+    "32": "icons/32.png",
+    "48": "icons/48.png",
+    "128": "icons/128.png"
+  },
   "action": {
-    "default_title": "磁力链接",
-    "default_popup": "popup.html"
+    "default_title": "Lodestone 磁石",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/16.png",
+      "32": "icons/32.png"
+    }
   }
 }
