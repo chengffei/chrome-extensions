@@ -1,23 +1,33 @@
 {
   "manifest_version": 3,
   "name": "__MSG_extName__",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "__MSG_extDescription__",
   "default_locale": "en",
   "minimum_chrome_version": "116",
   "permissions": [
-    "activeTab",
-    "scripting",
-    "declarativeContent",
-    "storage"
+    "webRequest",
+    "declarativeNetRequestWithHostAccess",
+    "offscreen",
+    "downloads",
+    "storage",
+    "scripting"
+  ],
+  "host_permissions": [
+    "<all_urls>"
   ],
   "background": {
     "service_worker": "src/background.js"
   },
   "content_scripts": [
     {
-      "matches": ["https://www.bilibili.com/video/*"],
-      "js": ["vendor/mediabunny.min.js", "src/core.js", "src/mux.js", "src/panel-css.js", "src/content.js"],
+      "matches": [
+        "https://www.bilibili.com/video/*"
+      ],
+      "js": [
+        "src/core.js",
+        "src/bili-content.js"
+      ],
       "run_at": "document_idle"
     }
   ],
@@ -29,6 +39,7 @@
   },
   "action": {
     "default_title": "__MSG_actionTitle__",
+    "default_popup": "src/popup.html",
     "default_icon": {
       "16": "icons/16.png",
       "32": "icons/32.png"

@@ -7,7 +7,7 @@ Small Chrome extensions I build for myself. They work in Chrome and other Chromi
 | Extension | What it does |
 | --- | --- |
 | [Lodestone](lodestone/) | Lists magnet links and info hashes on a page, guesses resource names, copies and locates them |
-| [Spool](spool/) | Saves bilibili videos you can already watch, in the best quality your account allows |
+| [Spool](spool/) | Finds videos on a page and saves them: direct files, HLS, DASH, and bilibili in your account's best quality |
 
 ## Install
 
@@ -28,7 +28,7 @@ Felix 自制的 Chrome 插件合集，Chrome 与夸克等 Chromium 浏览器通�
 | 插件 | 说明 |
 | --- | --- |
 | [Lodestone 磁石](lodestone/) | 列出网页里的磁力链接和哈希，推测资源名，一键复制和定位 |
-| [Spool 卷轴](spool/) | 保存你在 B 站能观看的视频，清晰度以账号权限为上限 |
+| [Spool 卷轴](spool/) | 发现网页里的视频并保存：直链、HLS、DASH，B 站按账号最高清晰度 |
 
 ### 安装
 

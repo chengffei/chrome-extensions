@@ -3,43 +3,49 @@
     "message": "Spool"
   },
   "extDescription": {
-    "message": "Save bilibili videos you can already watch, in the best quality your own account allows. Merged in your browser; no servers, no tracking."
+    "message": "Finds the videos on a web page and saves them as files: MP4, HLS and DASH streams, plus bilibili in your account's best quality. No servers, no tracking."
   },
   "actionTitle": {
-    "message": "Spool: save this video"
+    "message": "Spool: videos on this page"
   },
-  "close": {
-    "message": "Close"
+  "disclaimer": {
+    "message": "Only for videos you have the right to save. DRM-protected content and YouTube are not supported. Not affiliated with any site."
+  },
+  "emptyPage": {
+    "message": "Open a web page with a video first."
+  },
+  "blockedSite": {
+    "message": "Spool does not download from YouTube."
+  },
+  "empty": {
+    "message": "No videos found yet. Play the video, then open Spool again."
   },
   "loading": {
-    "message": "Reading available streams…"
+    "message": "Reading…"
   },
-  "notVideoPage": {
-    "message": "Open a bilibili video page (www.bilibili.com/video/…) first."
+  "video": {
+    "message": "Video"
   },
-  "signedOut": {
-    "message": "Not signed in: up to 480P. Sign in for 1080P."
+  "audio": {
+    "message": "Audio"
   },
-  "signedInBasic": {
-    "message": "Signed in as $1. Up to 1080P; higher tiers need a bilibili membership."
+  "quality": {
+    "message": "Quality"
   },
-  "signedInVip": {
-    "message": "Signed in as $1 with membership: every tier your account can play."
+  "drm": {
+    "message": "DRM protected, cannot be saved"
   },
-  "codec": {
-    "message": "Video codec"
+  "live": {
+    "message": "Live stream, not supported yet"
   },
-  "codec_auto": {
-    "message": "Auto"
+  "biliSignedOut": {
+    "message": "bilibili: not signed in, up to 480P. Sign in for 1080P."
   },
-  "codec_avc": {
-    "message": "H.264 (most compatible)"
+  "biliBasic": {
+    "message": "bilibili: up to 1080P. Higher tiers need a membership."
   },
-  "codec_hevc": {
-    "message": "HEVC (smaller)"
-  },
-  "codec_av1": {
-    "message": "AV1 (smallest)"
+  "biliVip": {
+    "message": "bilibili: membership, every quality your account can play."
   },
   "download": {
     "message": "Download"
@@ -47,65 +53,50 @@
   "cancel": {
     "message": "Cancel"
   },
-  "back": {
-    "message": "Back"
-  },
   "retry": {
-    "message": "Try again"
+    "message": "Retry"
   },
-  "copy": {
-    "message": "Copy command"
+  "show": {
+    "message": "Show"
   },
-  "copied": {
-    "message": "Copied"
+  "queued": {
+    "message": "Waiting…"
   },
-  "preparing": {
-    "message": "Preparing"
+  "downloading": {
+    "message": "Downloading"
   },
-  "merging": {
-    "message": "Saving"
+  "saving": {
+    "message": "Saving…"
   },
-  "savingVideo": {
-    "message": "Saving video"
-  },
-  "savingAudio": {
-    "message": "Saving audio"
-  },
-  "done": {
-    "message": "Saved $1"
-  },
-  "doneRaw": {
-    "message": "Saved the original video and audio files."
-  },
-  "ffmpegHint": {
-    "message": "To keep Dolby Vision, merge the two files with ffmpeg:"
-  },
-  "dvNote": {
-    "message": "Saved as two original files to keep Dolby Vision"
-  },
-  "disclaimer": {
-    "message": "Spool only saves what your account can already play, for personal offline viewing. Respect creators' rights; do not re-upload. Not affiliated with bilibili."
+  "saved": {
+    "message": "Saved to Downloads"
   },
   "errNeedLogin": {
-    "message": "This video needs you to sign in to bilibili."
+    "message": "Sign in to bilibili to save this video."
   },
   "errRisk": {
-    "message": "bilibili is rate-limiting requests. Wait a few minutes and try again."
+    "message": "bilibili is limiting requests. Try again in a few minutes."
   },
   "errNoPermission": {
-    "message": "Your account cannot play this video (members-only, paid or region-locked)."
+    "message": "Your account cannot play this video."
   },
   "errNotFound": {
-    "message": "Video not found or removed."
+    "message": "Video not found."
   },
   "errNoDash": {
-    "message": "This video has no separate streams Spool can save."
+    "message": "No saveable streams for this video."
   },
   "errNetwork": {
-    "message": "Network error. Check your connection and try again."
+    "message": "Network error. Try again."
   },
-  "errTooLarge": {
-    "message": "This file is too large to build in memory in this browser. Use Chrome or Edge 116 or later."
+  "errHttp": {
+    "message": "The site refused the download."
+  },
+  "errNotMedia": {
+    "message": "Not a playable video."
+  },
+  "errSave": {
+    "message": "Could not save the file."
   },
   "errGeneric": {
     "message": "Something went wrong."

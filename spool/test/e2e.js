@@ -1,115 +1,145 @@
-// End-to-end test in Chrome for Testing: loads the unpacked extension,
-// opens a public video signed out, toggles the panel, downloads through the
-// real File System Access writer (pointed at the page's private file
-// system instead of a save dialog) and checks the file with ffprobe.
+// End-to-end test in Chrome for Testing. Loads the unpacked extension,
+// opens a local page that plays a direct MP4 and loads HLS, DASH and a
+// DRM-protected playlist, downloads each from the popup and checks the
+// files with ffprobe. Optionally repeats on a public bilibili video.
 //
-// Needs puppeteer (not a dependency of the extension):
+// Needs puppeteer, which is not a dependency of the extension:
 //   npm i --prefix /tmp/spool-e2e puppeteer
-//   NODE_PATH=/tmp/spool-e2e/node_modules node test/e2e.js [BVID]
+//   NODE_PATH=/tmp/spool-e2e/node_modules node test/e2e.js [--bili BV...]
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const { execFileSync } = require('node:child_process');
 const puppeteer = require('puppeteer');
+const { fixtureDir, serve } = require('./fixtures');
 
 const EXT = path.join(__dirname, '..');
-const BVID = process.argv[2] || 'BV1GJ411x7h7';
 const OUT = process.env.SPOOL_OUT || fs.mkdtempSync(path.join(os.tmpdir(), 'spool-e2e-'));
+const DL = path.join(OUT, 'downloads');
+const biliArg = process.argv.indexOf('--bili');
+const BVID = biliArg > 0 ? process.argv[biliArg + 1] : null;
+
+const PAGE = `<!doctype html><title>Spool test page</title>
+<video src="/direct.mp4" controls muted></video>
+<script>
+  for (const u of ['/hls-ts/master.m3u8', '/hls-ts/v360.m3u8', '/hls-fmp4/master.m3u8', '/dash-number/manifest.mpd', '/drm/fairplay.m3u8']) fetch(u);
+  document.querySelector('video').play().catch(() => {});
+</script>`;
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+function probe(file) {
+  const pr = JSON.parse(execFileSync('ffprobe', ['-v', 'error', '-show_streams', '-show_format', '-of', 'json', file]));
+  execFileSync('ffmpeg', ['-v', 'error', '-xerror', '-i', file, '-f', 'null', '-']);
+  const v = pr.streams.find((s) => s.codec_type === 'video');
+  const a = pr.streams.find((s) => s.codec_type === 'audio');
+  return `${v ? `${v.codec_name} ${v.width}x${v.height}` : 'no video'}, ${a ? a.codec_name : 'no audio'}, ${Number(pr.format.duration).toFixed(1)}s`;
+}
+
+async function popupRows(popup) {
+  return popup.$$eval('.row', (rows) => rows.map((r) => ({
+    text: r.innerText.replace(/\s+/g, ' ').trim(),
+    canDownload: !!r.querySelector('button.primary:not([disabled])'),
+    saved: /Saved|已保存/.test(r.innerText),
+    failed: !!r.querySelector('.meta.err'),
+  })));
+}
+
+async function downloadAll(popup, expectCount) {
+  for (let i = 0; i < 60; i++) {
+    const btn = await popup.$('.row button.primary:not([disabled])');
+    if (!btn) break;
+    await btn.click();
+    await sleep(300);
+  }
+  const end = Date.now() + 5 * 60 * 1000;
+  let rows;
+  while (Date.now() < end) {
+    rows = await popupRows(popup);
+    if (rows.filter((r) => r.saved).length >= expectCount || rows.some((r) => r.failed)) break;
+    await sleep(500);
+  }
+  return rows;
+}
 
 (async () => {
+  fs.mkdirSync(DL, { recursive: true });
+  const server = await serve(fixtureDir(), { page: PAGE, referer: (s) => `http://127.0.0.1:${s.address().port}/page.html` });
+  const base = `http://127.0.0.1:${server.address().port}`;
+  // Download folder set through preferences (CDP download overrides rename files).
+  const profile = path.join(OUT, 'profile');
+  fs.mkdirSync(path.join(profile, 'Default'), { recursive: true });
+  fs.writeFileSync(path.join(profile, 'Default', 'Preferences'), JSON.stringify({ download: { default_directory: DL, prompt_for_download: false } }));
   const browser = await puppeteer.launch({
     headless: true,
-    args: [`--disable-extensions-except=${EXT}`, `--load-extension=${EXT}`, '--lang=zh-CN'],
+    userDataDir: profile,
+    args: [`--disable-extensions-except=${EXT}`, `--load-extension=${EXT}`],
   });
+  let failed = false;
   try {
-    const page = await browser.newPage();
-    await page.setViewport({ width: 1280, height: 900 });
-    await page.goto(`https://www.bilibili.com/video/${BVID}/`, { waitUntil: 'domcontentloaded' });
-
-    // Find Spool's isolated world and swap the save dialog for a file in
-    // the origin private file system. Everything else is the shipped code.
-    const cdp = await page.createCDPSession();
-    const worlds = [];
-    cdp.on('Runtime.executionContextCreated', (e) => worlds.push(e.context));
-    await cdp.send('Runtime.enable');
-    const deadline = Date.now() + 20000;
-    let world;
-    while (!(world = worlds.find((c) => c.name === 'Spool' || c.name.startsWith('Spool'))) && Date.now() < deadline) {
-      await new Promise((r) => setTimeout(r, 200));
-    }
-    if (!world) throw new Error('content script did not load');
-    const inWorld = async (expression) => {
-      const r = await cdp.send('Runtime.evaluate', { contextId: world.id, expression, awaitPromise: true, returnByValue: true });
-      if (r.exceptionDetails) throw new Error(JSON.stringify(r.exceptionDetails));
-      return r.result.value;
-    };
-    await inWorld(`window.showSaveFilePicker = async (o) => {
-      const dir = await navigator.storage.getDirectory();
-      window.__spoolTestName = o.suggestedName;
-      return dir.getFileHandle('spool-test.mp4', { create: true });
-    }; true`);
-
-    // Toggle the panel the way the toolbar button does.
     const sw = await browser.waitForTarget((t) => t.type() === 'service_worker' && t.url().endsWith('src/background.js'));
+    const extId = new URL(sw.url()).host;
     const worker = await sw.worker();
-    // Without the "tabs" permission tab URLs are hidden, so try every tab.
-    await worker.evaluate(async () => {
-      for (const tab of await chrome.tabs.query({})) {
-        try { await chrome.tabs.sendMessage(tab.id, { type: 'spool:toggle' }); return; } catch (_) { /* not ours */ }
-      }
-      throw new Error('no tab with Spool');
-    });
 
-    page.on('console', (m) => { if (/Spool/.test(m.text())) console.log('console:', m.text()); });
-    const panelState = () => inWorld(`(() => { const p = document.getElementById('spool-host')?.shadowRoot?.querySelector('.panel');
-      return p ? { rows: !!p.querySelector('.rows'), ok: !!p.querySelector('.msg.ok'), error: !!p.querySelector('.msg.error'), text: p.innerText } : null; })()`);
-    const waitPanel = async (pred, ms) => {
-      const end = Date.now() + ms;
-      let st;
+    // ---- Generic page ----
+    const page = await browser.newPage();
+    await page.goto(base + '/page.html', { waitUntil: 'networkidle0' });
+    const tabId = await worker.evaluate(async () => (await chrome.tabs.query({ title: 'Spool test page' }))[0].id);
+
+    const popup = await browser.newPage();
+    await popup.goto(`chrome-extension://${extId}/src/popup.html?tabId=${tabId}`);
+    await sleep(2500);
+    let rows = await popupRows(popup);
+    console.log('found:\n  ' + rows.map((r) => r.text).join('\n  '));
+    await popup.screenshot({ path: path.join(OUT, 'popup-list.png') });
+    const expect = (cond, msg) => { if (!cond) { failed = true; console.error('FAIL', msg); } };
+    // direct MP4, HLS TS master (2 variants), HLS fMP4 master, DASH, DRM; v360.m3u8 is hidden under its master.
+    expect(rows.length === 5, '5 rows, got ' + rows.length);
+    expect(!rows.some((r) => /v360\.m3u8/.test(r.text)), 'child playlist hidden');
+    expect(rows.some((r) => /DRM/.test(r.text) && !r.canDownload), 'DRM row is disabled');
+    expect(rows.some((r) => /360P.*240P|360P 240P/.test(r.text)), 'HLS master shows both variants');
+
+    rows = await downloadAll(popup, 4);
+    await popup.screenshot({ path: path.join(OUT, 'popup-done.png') });
+    console.log('after download:\n  ' + rows.map((r) => r.text).join('\n  '));
+    expect(rows.filter((r) => r.saved).length === 4, '4 downloads saved');
+    await sleep(1000);
+    const files = fs.readdirSync(DL).filter((f) => !f.endsWith('.crdownload') && !f.startsWith('.'));
+    for (const f of files) console.log('file:', f, '->', probe(path.join(DL, f)));
+    expect(files.length === 4, '4 files, got ' + files.length);
+    expect(files.every((f) => f.startsWith('Spool test page')), 'files named after the page');
+
+    // ---- bilibili ----
+    if (BVID) {
+      await page.goto(`https://www.bilibili.com/video/${BVID}/`, { waitUntil: 'domcontentloaded' });
+      await sleep(3000);
+      await popup.goto(`chrome-extension://${extId}/src/popup.html?tabId=${tabId}`);
+      await popup.waitForFunction(() => /bilibili/.test(document.body.innerText) && !/读取中|Reading/.test(document.body.innerText), { timeout: 30000 });
+      console.log('bilibili:', (await popupRows(popup)).map((r) => r.text).join(' | '));
+      const before = new Set(fs.readdirSync(DL));
+      await (await popup.$('.row button.primary')).click();
+      const end = Date.now() + 5 * 60 * 1000;
+      let added = [];
       while (Date.now() < end) {
-        st = await panelState();
-        if (st && (pred(st) || st.error)) return st;
-        await new Promise((r) => setTimeout(r, 500));
+        added = fs.readdirSync(DL).filter((f) => !before.has(f) && !f.endsWith('.crdownload') && !f.startsWith('.'));
+        if (added.length) break;
+        const r = await popupRows(popup);
+        if (r.some((x) => x.failed)) { console.error('bilibili failed:', r.map((x) => x.text)); break; }
+        await sleep(500);
       }
-      throw new Error('timeout; panel: ' + JSON.stringify(st));
-    };
-    let st = await waitPanel((x) => x.rows, 30000);
-    if (st.error) { await page.screenshot({ path: path.join(OUT, 'error.png') }); throw new Error(st.text); }
-    const shadow = (sel) => page.evaluateHandle((q) => document.getElementById('spool-host').shadowRoot.querySelector(q), sel);
-    const rows = await page.evaluate(() => [...document.getElementById('spool-host').shadowRoot.querySelectorAll('.row')]
-      .map((e) => e.innerText.replace(/\s+/g, ' ')));
-    console.log('options:', rows.join(' | '));
-    await page.screenshot({ path: path.join(OUT, 'panel.png') });
-
-    await (await shadow('button.primary')).click();
-    st = await waitPanel((x) => x.ok, 5 * 60 * 1000);
-    console.log('result:', st.text.split('\n').slice(0, 3).join(' / '));
-    await page.screenshot({ path: path.join(OUT, 'done.png') });
-    if (!st.ok) throw new Error(st.text);
-
-    // Copy the file out in base64 chunks.
-    const size = await inWorld(`navigator.storage.getDirectory().then(d => d.getFileHandle('spool-test.mp4')).then(h => h.getFile()).then(f => (window.__f = f).size)`);
-    const file = path.join(OUT, `${BVID}-e2e.mp4`);
-    const fd = fs.openSync(file, 'w');
-    const CHUNK = 4 * 1024 * 1024;
-    for (let off = 0; off < size; off += CHUNK) {
-      const b64 = await inWorld(`window.__f.slice(${off}, ${off + CHUNK}).arrayBuffer().then(b => {
-        let s = ''; const u = new Uint8Array(b);
-        for (let i = 0; i < u.length; i += 0x8000) s += String.fromCharCode.apply(null, u.subarray(i, i + 0x8000));
-        return btoa(s); })`);
-      fs.writeSync(fd, Buffer.from(b64, 'base64'));
+      await sleep(1000);
+      expect(added.length === 1, 'bilibili file saved');
+      for (const f of added) console.log('file:', f, '->', probe(path.join(DL, f)));
     }
-    fs.closeSync(fd);
-    console.log('suggested name:', await inWorld('window.__spoolTestName'));
 
-    const pr = JSON.parse(execFileSync('ffprobe', ['-v', 'error', '-show_streams', '-show_format', '-of', 'json', file]));
-    const v = pr.streams.find((s) => s.codec_type === 'video');
-    const a = pr.streams.find((s) => s.codec_type === 'audio');
-    console.log('file:', file, (size / 1e6).toFixed(1) + 'MB', v.codec_name, v.codec_tag_string, `${v.width}x${v.height}`,
-      a && a.codec_name, Number(pr.format.duration).toFixed(1) + 's');
-    execFileSync('ffmpeg', ['-v', 'error', '-xerror', '-i', file, '-f', 'null', '-']);
-    console.log('PASS');
+    const dls = await worker.evaluate(async () => (await chrome.downloads.search({})).map((d) => `${d.state} ${d.mime} ${d.filename}`));
+    console.log('downloads:\n  ' + dls.join('\n  '));
+    const leftovers = await worker.evaluate(async () => (await chrome.declarativeNetRequest.getSessionRules()).length);
+    expect(leftovers === 0, 'session rules cleaned up, left ' + leftovers);
+    console.log(failed ? 'FAIL' : 'PASS', '— output in', OUT);
   } finally {
     await browser.close();
+    server.close();
   }
+  process.exit(failed ? 1 : 0);
 })().catch((e) => { console.error('FAIL', e); process.exit(1); });

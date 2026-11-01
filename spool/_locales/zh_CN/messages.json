@@ -3,43 +3,49 @@
     "message": "Spool 卷轴"
   },
   "extDescription": {
-    "message": "保存你能在 B 站观看的视频，清晰度以你的账号权限为上限。在浏览器内合并，不经服务器，不收集数据。"
+    "message": "发现网页里的视频并保存为文件：支持 MP4、HLS、DASH 流，B 站按账号最高清晰度下载。不经服务器，不收集数据。"
   },
   "actionTitle": {
-    "message": "Spool：保存这个视频"
+    "message": "Spool：本页视频"
   },
-  "close": {
-    "message": "关闭"
+  "disclaimer": {
+    "message": "仅限你有权保存的视频。不支持 DRM 保护内容和 YouTube。与任何网站官方无关。"
+  },
+  "emptyPage": {
+    "message": "请先打开有视频的网页。"
+  },
+  "blockedSite": {
+    "message": "Spool 不下载 YouTube 视频。"
+  },
+  "empty": {
+    "message": "还没发现视频。先播放视频，再打开 Spool。"
   },
   "loading": {
-    "message": "正在读取可用清晰度…"
+    "message": "读取中…"
   },
-  "notVideoPage": {
-    "message": "请先打开 B 站视频页（www.bilibili.com/video/…）。"
+  "video": {
+    "message": "视频"
   },
-  "signedOut": {
-    "message": "未登录：最高 480P，登录后可到 1080P。"
+  "audio": {
+    "message": "音频"
   },
-  "signedInBasic": {
-    "message": "已登录 $1。最高 1080P，更高档位需要大会员。"
+  "quality": {
+    "message": "清晰度"
   },
-  "signedInVip": {
-    "message": "已登录 $1，大会员：可下载账号能播放的全部档位。"
+  "drm": {
+    "message": "受 DRM 保护，无法保存"
   },
-  "codec": {
-    "message": "视频编码"
+  "live": {
+    "message": "直播流，暂不支持"
   },
-  "codec_auto": {
-    "message": "自动"
+  "biliSignedOut": {
+    "message": "B 站：未登录，最高 480P，登录后可到 1080P。"
   },
-  "codec_avc": {
-    "message": "H.264（兼容最好）"
+  "biliBasic": {
+    "message": "B 站：最高 1080P，更高档位需要大会员。"
   },
-  "codec_hevc": {
-    "message": "HEVC（体积小）"
-  },
-  "codec_av1": {
-    "message": "AV1（体积最小）"
+  "biliVip": {
+    "message": "B 站：大会员，可下载账号能播放的全部档位。"
   },
   "download": {
     "message": "下载"
@@ -47,65 +53,50 @@
   "cancel": {
     "message": "取消"
   },
-  "back": {
-    "message": "返回"
-  },
   "retry": {
     "message": "重试"
   },
-  "copy": {
-    "message": "复制命令"
+  "show": {
+    "message": "显示"
   },
-  "copied": {
-    "message": "已复制"
+  "queued": {
+    "message": "排队中…"
   },
-  "preparing": {
-    "message": "准备中"
+  "downloading": {
+    "message": "下载中"
   },
-  "merging": {
-    "message": "保存中"
+  "saving": {
+    "message": "保存中…"
   },
-  "savingVideo": {
-    "message": "保存视频"
-  },
-  "savingAudio": {
-    "message": "保存音频"
-  },
-  "done": {
-    "message": "已保存 $1"
-  },
-  "doneRaw": {
-    "message": "已保存原始视频和音频两个文件。"
-  },
-  "ffmpegHint": {
-    "message": "要保留杜比视界，请用 ffmpeg 合并这两个文件："
-  },
-  "dvNote": {
-    "message": "为保留杜比视界，保存为两个原始文件"
-  },
-  "disclaimer": {
-    "message": "Spool 只保存你的账号本来能播放的内容，仅供个人离线观看。请尊重创作者权益，勿二次上传。与哔哩哔哩官方无关。"
+  "saved": {
+    "message": "已保存到下载文件夹"
   },
   "errNeedLogin": {
-    "message": "这个视频需要登录 B 站。"
+    "message": "需要登录 B 站才能保存这个视频。"
   },
   "errRisk": {
-    "message": "B 站正在限制请求频率，请等几分钟再试。"
+    "message": "B 站正在限制请求频率，请几分钟后再试。"
   },
   "errNoPermission": {
-    "message": "你的账号无权播放这个视频（会员专享、付费或地区限制）。"
+    "message": "你的账号无权播放这个视频。"
   },
   "errNotFound": {
-    "message": "视频不存在或已删除。"
+    "message": "视频不存在。"
   },
   "errNoDash": {
-    "message": "这个视频没有可保存的分离音视频流。"
+    "message": "这个视频没有可保存的流。"
   },
   "errNetwork": {
-    "message": "网络出错，请检查连接后重试。"
+    "message": "网络出错，请重试。"
   },
-  "errTooLarge": {
-    "message": "文件太大，当前浏览器无法在内存中合成。请使用 Chrome 或 Edge 116 及以上。"
+  "errHttp": {
+    "message": "网站拒绝了下载请求。"
+  },
+  "errNotMedia": {
+    "message": "不是可播放的视频。"
+  },
+  "errSave": {
+    "message": "文件保存失败。"
   },
   "errGeneric": {
     "message": "出错了。"
