@@ -11,10 +11,11 @@
 ## 行为
 
 - 识别 `<a href="magnet:">` 和正文里的纯文本磁链，跳过脚本与样式
+- 识别正文里的裸哈希（40 位十六进制或 32 位 Base32），自动补全 `magnet:?xt=urn:btih:` 前缀
 - 按 btih 哈希去重，同一资源多处出现合并为一条，连点「定位」依次跳转
 - 折叠的 `<details>` 自动展开；其他隐藏区域会提示
 - 权限只有 activeTab 和 scripting，点开图标时才读取当前页
 
 ## 测试
 
-打开 `test/test.html` 后点插件图标，应看到 5 条：Ubuntu（2 处）、Debian、CCCC、DDDD（折叠）、EEEE。
+打开 `test/test.html` 后点插件图标，应看到 7 条：Ubuntu（3 处）、Debian、CCCC、DDDD（折叠）、EEEE、两条「仅哈希」。

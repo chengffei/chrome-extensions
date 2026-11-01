@@ -4,6 +4,9 @@
 
   const RE = /magnet:\?[^\s"'<>（）【】「」《》，。；！？、]+/gi;
   const TRAIL = /[)\]}.,;:!?'"]+$/;
+  // 裸哈希：40 位十六进制或 32 位 Base32，前后不能紧贴字母数字
+  const HASH = /(?<![A-Za-z0-9])(?:[0-9a-fA-F]{40}|[A-Z2-7]{32})(?![A-Za-z0-9])/g;
+  const PREFIX = 'magnet:?xt=urn:btih:';
   const SKIP = new Set(['SCRIPT', 'STYLE', 'NOSCRIPT', 'TEXTAREA', 'TEMPLATE']);
   const HL = 'magnet-finder';
   let hits = [];
@@ -34,7 +37,7 @@
 
     const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
       acceptNode(n) {
-        if (!n.nodeValue.toLowerCase().includes('magnet:')) return NodeFilter.FILTER_REJECT;
+        if (n.nodeValue.length < 32) return NodeFilter.FILTER_REJECT;
         const p = n.parentElement;
         if (!p || SKIP.has(p.tagName)) return NodeFilter.FILTER_REJECT;
         if (p.closest('a[href^="magnet:" i]')) return NodeFilter.FILTER_REJECT;
@@ -42,9 +45,19 @@
       },
     });
     for (let n; (n = walker.nextNode()); ) {
-      for (const m of n.nodeValue.matchAll(RE)) {
+      const text = n.nodeValue;
+      const taken = [];
+      for (const m of text.matchAll(RE)) {
         const url = m[0].replace(TRAIL, '');
+        taken.push([m.index, m.index + m[0].length]);
         hits.push({ node: n, start: m.index, end: m.index + url.length, url, label: '' });
+      }
+      for (const m of text.matchAll(HASH)) {
+        const s = m.index;
+        const e = s + m[0].length;
+        if (taken.some(([a, b]) => s < b && e > a)) continue; // 已在完整磁链里
+        if (/^\d+$/.test(m[0])) continue; // 纯数字多半是编号
+        hits.push({ node: n, start: s, end: e, url: PREFIX + m[0], label: '', bare: true });
       }
     }
 
@@ -54,6 +67,7 @@
       key: keyOf(h.url),
       name: nameOf(h.url),
       label: h.label,
+      bare: !!h.bare,
     }));
   }
 

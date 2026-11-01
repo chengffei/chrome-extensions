@@ -64,9 +64,10 @@ async function scan() {
     for (const h of r.result || []) {
       let g = map.get(h.key);
       if (!g) {
-        g = { url: h.url, key: h.key, name: '', spots: [], cur: -1 };
+        g = { url: h.url, key: h.key, name: '', spots: [], cur: -1, bare: true };
         map.set(h.key, g);
       }
+      g.bare &&= h.bare; // 只要有一处是完整磁链，就不算「仅哈希」
       g.name ||= h.name || h.label;
       if (h.url.length > g.url.length) g.url = h.url; // 保留带 tracker 的完整版本
       g.spots.push({ frameId: r.frameId, i: h.i });
@@ -89,7 +90,7 @@ function render() {
 
     const name = document.createElement('div');
     name.className = 'name';
-    name.textContent = g.name || '未命名';
+    name.textContent = g.name || (g.bare ? '仅哈希，已补全前缀' : '未命名');
     name.title = g.url;
 
     const meta = document.createElement('div');
