@@ -22,24 +22,38 @@ async function copy(text, btn) {
   }
 }
 
+// 夸克的弹窗里 currentWindow 可能查不到标签页，逐级放宽条件
+async function activeTabId() {
+  const queries = [
+    { active: true, currentWindow: true },
+    { active: true, lastFocusedWindow: true },
+    { active: true },
+  ];
+  for (const q of queries) {
+    const tabs = await chrome.tabs.query(q);
+    const tab = tabs.find((t) => t.id !== undefined && !t.url?.startsWith('chrome-extension://'));
+    if (tab) return tab.id;
+  }
+  throw new Error('找不到当前标签页');
+}
+
 async function scan() {
   $('#count').textContent = '扫描中';
   message('');
   $('#list').replaceChildren();
 
-  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  tabId = tab.id;
   let results;
   try {
+    tabId = await activeTabId();
     const target = { tabId, allFrames: true };
     await chrome.scripting.executeScript({ target, files: ['content.js'] });
     results = await chrome.scripting.executeScript({
       target,
       func: () => window.__magnetFinder.scan(),
     });
-  } catch {
+  } catch (e) {
     $('#count').textContent = '无法读取';
-    message('这个页面不允许扩展读取，比如浏览器设置页和应用商店。');
+    message(`这个页面不允许扩展读取，比如浏览器设置页和应用商店。\n${e?.message || e}`);
     $('#copyAll').disabled = true;
     return;
   }

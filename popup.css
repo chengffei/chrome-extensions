@@ -40,7 +40,7 @@ button:disabled { background: #d2d2d7; cursor: default; }
 button.ghost { background: transparent; color: #0071e3; }
 button.ghost:hover { background: #e8f0fb; }
 
-#msg { padding: 24px 16px; color: #424245; text-align: center; }
+#msg { padding: 24px 16px; color: #424245; text-align: center; white-space: pre-line; word-break: break-all; }
 
 #list { list-style: none; padding: 8px 12px 12px; }
 
