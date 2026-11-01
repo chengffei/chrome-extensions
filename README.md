@@ -1,13 +1,13 @@
 # chrome-extensions
 
-Small Chrome extensions I build for myself. They work in Chrome and other Chromium browsers such as Quark. One folder per extension, no shared code.
+Free, open-source Chrome extensions by Felix. They work in Chrome, Edge and other Chromium browsers such as Quark. One folder per extension, no shared code, no tracking.
 
 [中文](#中文)
 
 | Extension | What it does |
 | --- | --- |
 | [Lodestone](lodestone/) | Lists magnet links and info hashes on a page, guesses resource names, copies and locates them |
-| [Spool](spool/) | Finds videos on a page and saves them: direct files, HLS, DASH, and bilibili in your account's best quality |
+| [Spool](https://chengffei.github.io/spool/) ([source](spool/)) | Finds videos on a page and saves them: direct files, HLS, DASH, and bilibili in your account's best quality |
 
 ## Install
 
@@ -23,12 +23,12 @@ MIT
 
 ## 中文
 
-Felix 自制的 Chrome 插件合集，Chrome 与夸克等 Chromium 浏览器通用。每个插件一个目录，互不依赖。
+Felix 的免费开源 Chrome 插件合集，Chrome、Edge 与夸克等 Chromium 浏览器通用。每个插件一个目录，互不依赖，不收集数据。
 
 | 插件 | 说明 |
 | --- | --- |
 | [Lodestone 磁石](lodestone/) | 列出网页里的磁力链接和哈希，推测资源名，一键复制和定位 |
-| [Spool 卷轴](spool/) | 发现网页里的视频并保存：直链、HLS、DASH，B 站按账号最高清晰度 |
+| [Spool 卷轴](https://chengffei.github.io/spool/zh/)（[源码](spool/)） | 发现网页里的视频并保存：直链、HLS、DASH，B 站按账号最高清晰度 |
 
 ### 安装
 

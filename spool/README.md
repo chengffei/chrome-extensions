@@ -2,7 +2,7 @@
 
 Finds the videos on a web page and saves them as files. Handles direct files (MP4, WebM and others), HLS and DASH streams, and bilibili in the best quality your own account allows. Streams are merged into one MP4 in your browser, without re-encoding. No servers, no tracking. Chrome, Edge and other Chromium browsers, version 116 or later.
 
-[中文](#中文)
+Website: <https://chengffei.github.io/spool/> · [中文](#中文)
 
 ## Install
 
@@ -78,6 +78,8 @@ Spool is not affiliated with or endorsed by any website it works on. Use it only
 ---
 
 ## 中文
+
+官网：<https://chengffei.github.io/spool/zh/>
 
 Spool 卷轴：发现网页里的视频并保存为文件。支持直链文件（MP4、WebM 等）、HLS 和 DASH 流；B 站按你自己账号的最高权限下载。流在浏览器内合并为一个 MP4，不重新编码。不经服务器，不收集数据。适用于 Chrome、Edge 等 Chromium 浏览器 116 及以上。
 
