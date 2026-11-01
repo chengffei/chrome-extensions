@@ -61,7 +61,7 @@ For bilibili, the page asks bilibili's own API with your session for the stream 
 | --- | --- |
 | `node --test test/` | bilibili signing and selection; detection rules; DASH parsing; downloads of locally built HLS (TS, fMP4, separate audio, AES-128), DASH (timeline, number), a direct file and DRM refusal, all checked with ffprobe and a full decode. Needs ffmpeg |
 | `SPOOL_LIVE=1 node --test test/live.test.js` | A public bilibili video signed out, in H.264, HEVC and AV1 |
-| `test/e2e.js` | The real extension in Chrome for Testing: a local page with every kind of resource, downloads from the popup, optional `--bili BV…`. Usage in the file header |
+| `test/e2e.js` | The real extension in Chrome for Testing, next to a second extension that listens for download names: a local page with every kind of resource, downloads from the popup, file names checked, optional `--bili BV…`. Usage in the file header |
 
 ## Packaging for a store
 
@@ -138,7 +138,7 @@ B 站由页面用你的登录态调用 B 站接口取流（WBI 签名，`fnval=4
 
 - `node --test test/`：B 站签名与选流、识别规则、DASH 解析，以及本地生成的 HLS（TS、fMP4、独立音轨、AES-128）、DASH（时间线、编号）、直链和 DRM 拒绝，全部用 ffprobe 和完整解码校验。需要 ffmpeg
 - `SPOOL_LIVE=1 node --test test/live.test.js`：未登录下载公开 B 站视频的 H.264、HEVC、AV1
-- `test/e2e.js`：在 Chrome for Testing 中加载真实插件，测试页包含各类资源，从弹窗下载，可加 `--bili BV…`；用法见文件开头
+- `test/e2e.js`：在 Chrome for Testing 中加载真实插件，并同时加载一个监听下载命名的插件；测试页包含各类资源，从弹窗下载并核对文件名，可加 `--bili BV…`；用法见文件开头
 
 ### 第三方代码
 

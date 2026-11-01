@@ -14,6 +14,7 @@ const puppeteer = require('puppeteer');
 const { fixtureDir, serve } = require('./fixtures');
 
 const EXT = path.join(__dirname, '..');
+const CONFLICT = path.join(__dirname, 'conflict-ext');
 const OUT = process.env.SPOOL_OUT || fs.mkdtempSync(path.join(os.tmpdir(), 'spool-e2e-'));
 const DL = path.join(OUT, 'downloads');
 const biliArg = process.argv.indexOf('--bili');
@@ -73,11 +74,13 @@ async function downloadAll(popup, expectCount) {
   const browser = await puppeteer.launch({
     headless: true,
     userDataDir: profile,
-    args: [`--disable-extensions-except=${EXT}`, `--load-extension=${EXT}`],
+    // A second extension that listens for file names, loaded last, to make
+    // sure Spool's files keep their names next to download managers.
+    args: [`--disable-extensions-except=${EXT},${CONFLICT}`, `--load-extension=${EXT},${CONFLICT}`],
   });
   let failed = false;
   try {
-    const sw = await browser.waitForTarget((t) => t.type() === 'service_worker' && t.url().endsWith('src/background.js'));
+    const sw = await browser.waitForTarget((t) => t.type() === 'service_worker' && t.url().endsWith('/src/background.js'));
     const extId = new URL(sw.url()).host;
     const worker = await sw.worker();
 

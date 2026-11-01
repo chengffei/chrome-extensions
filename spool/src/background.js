@@ -239,6 +239,27 @@ async function finishJob(jobId, patch) {
   return job;
 }
 
+// Spool's downloads start from an <a download> link in the offscreen
+// document, so the file name is the download's own default and survives
+// other extensions (download managers, sniffers) that listen here and
+// suggest nothing. This listener restates it when Spool is installed last.
+chrome.downloads.onDeterminingFilename.addListener((item, suggest) => {
+  if (!item.url.startsWith('blob:' + location.origin)) return false;
+  getState().then((s) => {
+    const job = s.jobs.find((j) => j.blobUrl && (j.blobUrl === item.url || j.blobUrl === item.finalUrl));
+    if (job) suggest({ filename: job.filename, conflictAction: 'uniquify' });
+    else suggest();
+  });
+  return true;
+});
+
+chrome.downloads.onCreated.addListener(async (item) => {
+  if (!item.url.startsWith('blob:' + location.origin)) return;
+  const s = await getState();
+  const job = s.jobs.find((j) => j.blobUrl === item.url);
+  if (job) { job.downloadId = item.id; save(); }
+});
+
 chrome.downloads.onChanged.addListener(async (delta) => {
   if (!delta.state || delta.state.current === 'in_progress') return;
   const s = await getState();
@@ -288,13 +309,11 @@ async function handle(msg) {
       return true;
     }
     case 'job:done': {
-      const job = await finishJob(msg.jobId, { status: 'saving', progress: 1 });
-      if (!job) return true;
-      try {
-        job.downloadId = await chrome.downloads.download({ url: msg.blobUrl, filename: job.filename, conflictAction: 'uniquify' });
-        save();
-      } catch (e) {
-        await finishJob(job.id, { status: 'failed', error: { kind: 'saveFailed', message: String(e && e.message) } });
+      // The offscreen document has started the download itself (see
+      // offscreen.js); onCreated below links it back to the job.
+      const job = await finishJob(msg.jobId, { status: 'saving', progress: 1, blobUrl: msg.blobUrl });
+      if (job && msg.error) {
+        await finishJob(job.id, { status: 'failed', error: { kind: 'saveFailed', message: msg.error } });
         await toOffscreen({ type: 'cleanup', jobId: job.id }).catch(() => {});
         pump();
       }

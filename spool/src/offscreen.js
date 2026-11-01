@@ -1,14 +1,14 @@
 // Spool offscreen document: runs probes and downloads. Writes each job to
-// the extension's private file system, then hands a blob URL of the
-// finished file to the service worker, which saves it to Downloads.
+// the extension's private file system, then starts the download of the
+// finished file with an <a download> link so it keeps its name.
 'use strict';
 
 const running = new Map(); // jobId -> AbortController
+const finished = new Map(); // jobId -> blob URL
 const MIME = {
   mp4: 'video/mp4', m4v: 'video/mp4', webm: 'video/webm', mov: 'video/quicktime', mkv: 'video/x-matroska', flv: 'video/x-flv',
   ogv: 'video/ogg', m4a: 'audio/mp4', mp3: 'audio/mpeg', ogg: 'audio/ogg', oga: 'audio/ogg', opus: 'audio/ogg', wav: 'audio/wav', flac: 'audio/flac',
 };
-const finished = new Map(); // jobId -> blob URL
 let rootDir = null;
 
 async function root() {
@@ -67,11 +67,20 @@ async function runJob(job) {
       try { await writable.abort(); } catch (_) { /* already closed */ }
       throw e;
     }
-    // Typed wrapper (still disk-backed) so the download gets the right type.
+    // Start the download from here with <a download>. The name is then the
+    // download's default, not a suggestion from chrome.downloads.download,
+    // which Chrome drops when another extension handles onDeterminingFilename.
     const type = MIME[(job.filename.match(/\.([a-z0-9]+)$/i) || [])[1]] || 'application/octet-stream';
     const url = URL.createObjectURL(new Blob([await handle.getFile()], { type }));
     finished.set(job.id, url);
-    send({ type: 'job:done', jobId: job.id, blobUrl: url });
+    // Tell the service worker first, so onCreated can match the URL.
+    await chrome.runtime.sendMessage({ type: 'job:done', jobId: job.id, blobUrl: url });
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = job.filename;
+    document.body.append(a);
+    a.click();
+    a.remove();
   } catch (e) {
     console.warn('[Spool] job failed', job.id, e);
     await dir.removeEntry(name).catch(() => {});
