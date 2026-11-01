@@ -1,17 +1,39 @@
 # chrome-extensions
 
+Small Chrome extensions I build for myself. They work in Chrome and other Chromium browsers such as Quark. One folder per extension, no shared code.
+
+[中文](#中文)
+
+| Extension | What it does |
+| --- | --- |
+| [Lodestone](lodestone/) | Lists magnet links and info hashes on a page, guesses resource names, copies and locates them |
+
+## Install
+
+1. Download or clone this repository
+2. Open `chrome://extensions` (in Quark, `quark://extensions`) and turn on **Developer mode**
+3. Click **Load unpacked** and pick the extension's folder
+
+## License
+
+MIT
+
+---
+
+## 中文
+
 Felix 自制的 Chrome 插件合集，Chrome 与夸克等 Chromium 浏览器通用。每个插件一个目录，互不依赖。
 
 | 插件 | 说明 |
 | --- | --- |
 | [Lodestone 磁石](lodestone/) | 列出网页里的磁力链接和哈希，推测资源名，一键复制和定位 |
 
-## 安装
+### 安装
 
 1. 下载或 clone 本仓库
 2. 打开 `chrome://extensions`（夸克用 `quark://extensions`），开启「开发者模式」
 3. 点「加载已解压的扩展程序」，选对应插件的目录
 
-## 许可
+### 许可
 
 MIT
