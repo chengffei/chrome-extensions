@@ -1,0 +1,113 @@
+{
+  "extName": {
+    "message": "Spool 卷轴"
+  },
+  "extDescription": {
+    "message": "保存你能在 B 站观看的视频，清晰度以你的账号权限为上限。在浏览器内合并，不经服务器，不收集数据。"
+  },
+  "actionTitle": {
+    "message": "Spool：保存这个视频"
+  },
+  "close": {
+    "message": "关闭"
+  },
+  "loading": {
+    "message": "正在读取可用清晰度…"
+  },
+  "notVideoPage": {
+    "message": "请先打开 B 站视频页（www.bilibili.com/video/…）。"
+  },
+  "signedOut": {
+    "message": "未登录：最高 480P，登录后可到 1080P。"
+  },
+  "signedInBasic": {
+    "message": "已登录 $1。最高 1080P，更高档位需要大会员。"
+  },
+  "signedInVip": {
+    "message": "已登录 $1，大会员：可下载账号能播放的全部档位。"
+  },
+  "codec": {
+    "message": "视频编码"
+  },
+  "codec_auto": {
+    "message": "自动"
+  },
+  "codec_avc": {
+    "message": "H.264（兼容最好）"
+  },
+  "codec_hevc": {
+    "message": "HEVC（体积小）"
+  },
+  "codec_av1": {
+    "message": "AV1（体积最小）"
+  },
+  "download": {
+    "message": "下载"
+  },
+  "cancel": {
+    "message": "取消"
+  },
+  "back": {
+    "message": "返回"
+  },
+  "retry": {
+    "message": "重试"
+  },
+  "copy": {
+    "message": "复制命令"
+  },
+  "copied": {
+    "message": "已复制"
+  },
+  "preparing": {
+    "message": "准备中"
+  },
+  "merging": {
+    "message": "保存中"
+  },
+  "savingVideo": {
+    "message": "保存视频"
+  },
+  "savingAudio": {
+    "message": "保存音频"
+  },
+  "done": {
+    "message": "已保存 $1"
+  },
+  "doneRaw": {
+    "message": "已保存原始视频和音频两个文件。"
+  },
+  "ffmpegHint": {
+    "message": "要保留杜比视界，请用 ffmpeg 合并这两个文件："
+  },
+  "dvNote": {
+    "message": "为保留杜比视界，保存为两个原始文件"
+  },
+  "disclaimer": {
+    "message": "Spool 只保存你的账号本来能播放的内容，仅供个人离线观看。请尊重创作者权益，勿二次上传。与哔哩哔哩官方无关。"
+  },
+  "errNeedLogin": {
+    "message": "这个视频需要登录 B 站。"
+  },
+  "errRisk": {
+    "message": "B 站正在限制请求频率，请等几分钟再试。"
+  },
+  "errNoPermission": {
+    "message": "你的账号无权播放这个视频（会员专享、付费或地区限制）。"
+  },
+  "errNotFound": {
+    "message": "视频不存在或已删除。"
+  },
+  "errNoDash": {
+    "message": "这个视频没有可保存的分离音视频流。"
+  },
+  "errNetwork": {
+    "message": "网络出错，请检查连接后重试。"
+  },
+  "errTooLarge": {
+    "message": "文件太大，当前浏览器无法在内存中合成。请使用 Chrome 或 Edge 116 及以上。"
+  },
+  "errGeneric": {
+    "message": "出错了。"
+  }
+}
