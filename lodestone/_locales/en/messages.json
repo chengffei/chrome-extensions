@@ -1,0 +1,86 @@
+{
+  "extName": {
+    "message": "Lodestone"
+  },
+  "extDescription": {
+    "message": "Finds magnet links and info hashes on a page, guesses resource names, copies them and jumps to where they are."
+  },
+  "scanning": {
+    "message": "Scanning"
+  },
+  "rescan": {
+    "message": "Rescan"
+  },
+  "copyAll": {
+    "message": "Copy all"
+  },
+  "copy": {
+    "message": "Copy"
+  },
+  "copied": {
+    "message": "Copied"
+  },
+  "copyFailed": {
+    "message": "Copy failed"
+  },
+  "cannotRead": {
+    "message": "Can't read this page"
+  },
+  "cannotReadMsg": {
+    "message": "This page doesn't allow extensions, such as browser settings and the web store."
+  },
+  "noTab": {
+    "message": "Can't find the current tab"
+  },
+  "countZero": {
+    "message": "None found"
+  },
+  "none": {
+    "message": "No magnet links on this page."
+  },
+  "noName": {
+    "message": "No name found"
+  },
+  "tagGuess": {
+    "message": "Guessed"
+  },
+  "tagBare": {
+    "message": "Hash only"
+  },
+  "located": {
+    "message": "Located"
+  },
+  "hidden": {
+    "message": "Hidden on the page, expand it and try again"
+  },
+  "changed": {
+    "message": "Page changed, please rescan"
+  },
+  "countHint": {
+    "message": "$COUNT$ found, click a card to locate",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "tagSpots": {
+    "message": "$COUNT$ places",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "locatedN": {
+    "message": "Located $N$/$TOTAL$",
+    "placeholders": {
+      "n": {
+        "content": "$1"
+      },
+      "total": {
+        "content": "$2"
+      }
+    }
+  }
+}

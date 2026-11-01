@@ -17,6 +17,7 @@ Finds magnet links and info hashes on a web page, guesses each resource's name, 
 - Name priority: `dn` parameter > link text > nearby text (marked as a guess)
 - Opens collapsed `<details>` automatically; tells you when a link sits in another hidden area
 - Permissions are only `activeTab` and `scripting`; it reads the page only when you click the icon
+- Interface in English and Simplified Chinese, following the browser language
 
 ## How names are guessed
 
@@ -49,6 +50,7 @@ Lodestone 磁石：找出网页里的磁力链接和哈希，推测资源名，�
 - 资源名优先级：`dn` 参数 > 链接文字 > 就近推测（标「就近推测」）
 - 折叠的 `<details>` 自动展开；其他隐藏区域会提示
 - 权限只有 activeTab 和 scripting，点开图标时才读取当前页
+- 界面中英双语，跟随浏览器语言
 
 ### 资源名推测
 

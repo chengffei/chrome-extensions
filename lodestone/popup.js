@@ -1,4 +1,8 @@
 const $ = (s) => document.querySelector(s);
+const t = (key, ...subs) => chrome.i18n.getMessage(key, subs.map(String)) || key;
+
+document.documentElement.lang = chrome.i18n.getUILanguage();
+document.querySelectorAll('[data-i18n]').forEach((el) => (el.textContent = t(el.dataset.i18n)));
 const RANK = { dn: 3, link: 2, near: 1, '': 0 };
 let tabId = 0;
 let groups = [];
@@ -17,9 +21,9 @@ function flash(btn, text) {
 async function copy(text, btn) {
   try {
     await navigator.clipboard.writeText(text);
-    flash(btn, '已复制');
+    flash(btn, t('copied'));
   } catch {
-    flash(btn, '复制失败');
+    flash(btn, t('copyFailed'));
   }
 }
 
@@ -35,11 +39,11 @@ async function activeTabId() {
     const tab = tabs.find((t) => t.id !== undefined && !t.url?.startsWith('chrome-extension://'));
     if (tab) return tab.id;
   }
-  throw new Error('找不到当前标签页');
+  throw new Error(t('noTab'));
 }
 
 async function scan() {
-  $('#count').textContent = '扫描中';
+  $('#count').textContent = t('scanning');
   message('');
   $('#list').replaceChildren();
 
@@ -53,8 +57,8 @@ async function scan() {
       func: () => window.__lodestone.scan(),
     });
   } catch (e) {
-    $('#count').textContent = '无法读取';
-    message(`这个页面不允许扩展读取，比如浏览器设置页和应用商店。\n${e?.message || e}`);
+    $('#count').textContent = t('cannotRead');
+    message(`${t('cannotReadMsg')}\n${e?.message || e}`);
     $('#copyAll').disabled = true;
     return;
   }
@@ -90,9 +94,9 @@ function tag(text, cls = '') {
 
 function render() {
   $('#copyAll').disabled = groups.length === 0;
-  $('#count').textContent = groups.length ? `${groups.length} 条，点卡片定位` : '0 条';
+  $('#count').textContent = groups.length ? t('countHint', groups.length) : t('countZero');
   if (!groups.length) {
-    message('当前页面没有找到磁力链接。');
+    message(t('none'));
     return;
   }
 
@@ -106,7 +110,7 @@ function render() {
 
     const name = document.createElement('div');
     name.className = g.name ? 'name' : 'name empty';
-    name.textContent = g.name || '未找到名称';
+    name.textContent = g.name || t('noName');
 
     const hash = document.createElement('div');
     hash.className = 'hash';
@@ -116,16 +120,16 @@ function render() {
     tags.className = 'tags';
     const status = tag('', 'status');
     status.hidden = true;
-    if (g.source === 'near') tags.append(tag('就近推测'));
-    if (g.bare) tags.append(tag('仅哈希'));
-    if (g.spots.length > 1) tags.append(tag(`${g.spots.length} 处`));
+    if (g.source === 'near') tags.append(tag(t('tagGuess')));
+    if (g.bare) tags.append(tag(t('tagBare')));
+    if (g.spots.length > 1) tags.append(tag(t('tagSpots', g.spots.length)));
     tags.append(status);
 
     body.append(name, hash, tags);
 
     const cp = document.createElement('button');
     cp.className = 'copy';
-    cp.textContent = '复制';
+    cp.textContent = t('copy');
     cp.onclick = (e) => {
       e.stopPropagation();
       copy(g.url, cp);
@@ -157,14 +161,14 @@ async function locate(g, li, status) {
     });
     if (r.result === 'ok') {
       li.classList.add('on');
-      show(multi ? `已定位 ${g.cur + 1}/${g.spots.length}` : '已定位', 'status');
+      show(multi ? t('locatedN', g.cur + 1, g.spots.length) : t('located'), 'status');
     } else if (r.result === 'hidden') {
-      show('在隐藏区域，展开后再试', 'warn');
+      show(t('hidden'), 'warn');
     } else {
-      show('页面已变化，请重新扫描', 'warn');
+      show(t('changed'), 'warn');
     }
   } catch {
-    show('页面已变化，请重新扫描', 'warn');
+    show(t('changed'), 'warn');
   }
 }
 

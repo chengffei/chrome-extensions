@@ -1,0 +1,86 @@
+{
+  "extName": {
+    "message": "Lodestone 磁石"
+  },
+  "extDescription": {
+    "message": "找出网页里的磁力链接和哈希，推测资源名，一键复制，点一下跳到原位置。"
+  },
+  "scanning": {
+    "message": "扫描中"
+  },
+  "rescan": {
+    "message": "重新扫描"
+  },
+  "copyAll": {
+    "message": "复制全部"
+  },
+  "copy": {
+    "message": "复制"
+  },
+  "copied": {
+    "message": "已复制"
+  },
+  "copyFailed": {
+    "message": "复制失败"
+  },
+  "cannotRead": {
+    "message": "无法读取"
+  },
+  "cannotReadMsg": {
+    "message": "这个页面不允许扩展读取，比如浏览器设置页和应用商店。"
+  },
+  "noTab": {
+    "message": "找不到当前标签页"
+  },
+  "countZero": {
+    "message": "0 条"
+  },
+  "none": {
+    "message": "当前页面没有找到磁力链接。"
+  },
+  "noName": {
+    "message": "未找到名称"
+  },
+  "tagGuess": {
+    "message": "就近推测"
+  },
+  "tagBare": {
+    "message": "仅哈希"
+  },
+  "located": {
+    "message": "已定位"
+  },
+  "hidden": {
+    "message": "在隐藏区域，展开后再试"
+  },
+  "changed": {
+    "message": "页面已变化，请重新扫描"
+  },
+  "countHint": {
+    "message": "$COUNT$ 条，点卡片定位",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "tagSpots": {
+    "message": "$COUNT$ 处",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "locatedN": {
+    "message": "已定位 $N$/$TOTAL$",
+    "placeholders": {
+      "n": {
+        "content": "$1"
+      },
+      "total": {
+        "content": "$2"
+      }
+    }
+  }
+}

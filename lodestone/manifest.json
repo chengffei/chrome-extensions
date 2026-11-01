@@ -1,9 +1,13 @@
 {
   "manifest_version": 3,
-  "name": "Lodestone 磁石",
-  "version": "0.2.0",
-  "description": "找出网页里的磁力链接和哈希，推测资源名，一键复制，点一下跳到原位置。",
-  "permissions": ["activeTab", "scripting"],
+  "name": "__MSG_extName__",
+  "version": "0.3.0",
+  "description": "__MSG_extDescription__",
+  "default_locale": "en",
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
   "icons": {
     "16": "icons/16.png",
     "32": "icons/32.png",
@@ -11,7 +15,7 @@
     "128": "icons/128.png"
   },
   "action": {
-    "default_title": "Lodestone 磁石",
+    "default_title": "__MSG_extName__",
     "default_popup": "popup.html",
     "default_icon": {
       "16": "icons/16.png",
