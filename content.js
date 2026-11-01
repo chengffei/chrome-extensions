@@ -45,7 +45,7 @@
       .replace(RE, ' ')
       .replace(HASH, ' ')
       .replace(/\s+/g, ' ')
-      .replace(/^[\s:：\-—|·•>»]+|[\s:：\-—|·•<«]+$/g, '');
+      .replace(/^[\s:：\-—|·•>»]+|[\s:：\-—|·•<«(（\[【]+$/g, '');
     const m = t.match(LABEL);
     return { text: (m ? m[1] : t).trim(), labeled: !!m };
   }
